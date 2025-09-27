@@ -1,6 +1,6 @@
 # uschess-webdemo
 
-demo/portfolio repository that reproduces a scaled-down version of the ChessLife web interface and architecture I worked on.
+demo/portfolio repository that reproduces a scaled-down version of some aspects of the ChessLife web interface and architecture I worked on.
 
 - Example SQL schema + seed data modelling
 - Frontend demo (HTML/JS/CSS) that lists/searches publications.
