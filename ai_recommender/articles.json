@@ -1,0 +1,44 @@
+--publication format 
+
+[
+  {
+    "publication_id": 1,
+    "title": "The Sicilian Revisited",
+    "summary": "A deep dive into modern Sicilian lines.",
+    "content": "Detailed analysis of the modern Sicilian Defense and novelties. Includes move-by-move commentary and typical plans.",
+    "category": "Openings",
+    "author": "IM Ravi"
+  },
+  {
+    "publication_id": 2,
+    "title": "Basic King and Pawn Endgames",
+    "summary": "Foundational endgames for club players.",
+    "content": "A practical guide to king and pawn endgames with illustrative positions and conversion plans.",
+    "category": "Endgames",
+    "author": "GM Anna"
+  },
+  {
+    "publication_id": 3,
+    "title": "Tactical Patterns You Must Know",
+    "summary": "A training set of tactical exercises.",
+    "content": "Collection of tactical motifs including forks, pins, skewers, and discovered attacks. Multiple puzzles included.",
+    "category": "Tactics",
+    "author": "IM Ravi"
+  },
+  {
+    "publication_id": 4,
+    "title": "World Championship 1993: Game 5",
+    "summary": "Historical annotated game with commentary.",
+    "content": "Annotated moves from Game 5 with modern engine evaluation and historical notes.",
+    "category": "Annotated Games",
+    "author": "GM Anna"
+  },
+  {
+    "publication_id": 5,
+    "title": "Practical Middlegame Plans",
+    "summary": "Middlegame plans for improving players.",
+    "content": "How to build plans from slightly better positions, pawn structure evaluation, and piece coordination techniques.",
+    "category": "Openings",
+    "author": "IM Ravi"
+  }
+]
