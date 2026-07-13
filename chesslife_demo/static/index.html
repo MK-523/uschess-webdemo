@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore a small, public ChessLife publication discovery demo.">
+  <title>ChessLife Discovery Demo</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to publications</a>
+
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="ChessLife discovery home">
+      <span class="brand-mark" aria-hidden="true">♞</span>
+      <span>
+        <strong>ChessLife</strong>
+        <small>Discovery demo</small>
+      </span>
+    </a>
+    <span class="demo-badge">Public portfolio reconstruction</span>
+  </header>
+
+  <main id="main-content">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">Archive exploration, thoughtfully rebuilt</p>
+        <h1 id="hero-title">Find the chess idea you want to study next.</h1>
+        <p>
+          Search a small fictional publication collection by topic, author, category,
+          or date, then discover related reading through transparent recommendations.
+        </p>
+      </div>
+      <div class="hero-piece" aria-hidden="true">
+        <span>♜</span><span>♝</span><span>♛</span>
+      </div>
+    </section>
+
+    <section class="search-panel" aria-labelledby="search-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Search the collection</p>
+          <h2 id="search-title">Publication finder</h2>
+        </div>
+        <button id="reset-button" class="text-button" type="button">Reset filters</button>
+      </div>
+
+      <form id="search-form" role="search">
+        <div class="field field-wide">
+          <label for="search-input">Topic, title, or keyword</label>
+          <div class="search-control">
+            <span aria-hidden="true">⌕</span>
+            <input
+              id="search-input"
+              name="q"
+              type="search"
+              maxlength="200"
+              autocomplete="off"
+              placeholder="Try endgame, Sicilian, or tactical patterns"
+            >
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="category-filter">Category</label>
+          <select id="category-filter" name="category">
+            <option value="">All categories</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="date-from">Published from</label>
+          <input id="date-from" name="date_from" type="date">
+        </div>
+
+        <div class="field">
+          <label for="date-to">Published through</label>
+          <input id="date-to" name="date_to" type="date">
+        </div>
+
+        <button class="primary-button" type="submit">Search publications</button>
+      </form>
+    </section>
+
+    <section class="results-section" aria-labelledby="results-title" aria-busy="true">
+      <div class="section-heading results-heading">
+        <div>
+          <p class="eyebrow">Curated demo archive</p>
+          <h2 id="results-title">Publications</h2>
+        </div>
+        <p id="result-count" class="result-count" aria-live="polite">Loading…</p>
+      </div>
+
+      <div id="status-message" class="status-message" role="status" aria-live="polite"></div>
+      <div id="publication-grid" class="publication-grid"></div>
+
+      <div class="load-more-wrap">
+        <button id="load-more-button" class="secondary-button" type="button" hidden>
+          Load more
+        </button>
+      </div>
+    </section>
+
+    <section class="about-panel" aria-labelledby="about-title">
+      <p class="eyebrow">How this demo works</p>
+      <h2 id="about-title">Small data, real architecture</h2>
+      <div class="about-grid">
+        <p><strong>Search</strong><span>SQLite FTS5 ranks matching titles, summaries, and article text.</span></p>
+        <p><strong>Filter</strong><span>Parameterized queries narrow results by category and publication date.</span></p>
+        <p><strong>Discover</strong><span>Related reading uses category and token overlap—not an opaque model.</span></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Fictional demo content only. This is not the production ChessLife website or archive.</p>
+  </footer>
+
+  <dialog id="article-dialog" aria-labelledby="article-title">
+    <div class="dialog-shell">
+      <button id="close-dialog-button" class="dialog-close" type="button" aria-label="Close article">×</button>
+      <article id="article-content" tabindex="-1">
+        <p id="article-category" class="eyebrow"></p>
+        <h2 id="article-title">Publication</h2>
+        <p id="article-meta" class="article-meta"></p>
+        <p id="article-summary" class="article-summary"></p>
+        <div id="article-body" class="article-body"></div>
+      </article>
+      <aside aria-labelledby="recommendations-title">
+        <div class="recommendation-heading">
+          <p class="eyebrow">Continue studying</p>
+          <h3 id="recommendations-title">Related publications</h3>
+        </div>
+        <div id="recommendation-list" class="recommendation-list"></div>
+      </aside>
+    </div>
+  </dialog>
+
+  <template id="publication-card-template">
+    <article class="publication-card">
+      <div class="card-topline">
+        <span class="category-pill"></span>
+        <time></time>
+      </div>
+      <h3></h3>
+      <p class="card-summary"></p>
+      <div class="card-footer">
+        <span class="card-author"></span>
+        <button class="read-button" type="button">Read article <span aria-hidden="true">→</span></button>
+      </div>
+    </article>
+  </template>
+</body>
+</html>
+

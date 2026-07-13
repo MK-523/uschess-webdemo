@@ -1,0 +1,14 @@
+services:
+  web:
+    build: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      CHESSLIFE_DB_PATH: /data/chesslife.sqlite3
+    volumes:
+      - chesslife-data:/data
+    restart: unless-stopped
+
+volumes:
+  chesslife-data:
+

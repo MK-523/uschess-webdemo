@@ -1,67 +1,128 @@
-# ChessLife Web Demo
+# ChessLife Discovery Demo
 
-A public, scaled-down reconstruction of selected publication-search components from web work associated with ChessLife.
+A polished, public reconstruction of a small publication-discovery workflow inspired by web work associated with ChessLife.
 
-The repository demonstrates three pieces of a small publication-discovery stack:
+This repository is a portfolio demo, not the production ChessLife codebase. It contains no production source, private publication data, credentials, analytics, or US Chess infrastructure. Every article in the seed database is fictional demo content retained from the repository's original sample.
 
-- a static browser interface for listing and searching publications;
-- an example SQL schema with seed data;
-- a lightweight Python recommender based on keyword and term-frequency matching.
+## What is included
 
-This is a portfolio demonstration. It is not the production ChessLife codebase and does not contain production data.
-
-## Repository structure
-
-```text
-frontend/        static HTML, CSS, JavaScript, and local publication data
-backend/         example SQL schema, seed data, and queries
-ai_recommender/  keyword/term-frequency recommender and sample article JSON
-```
+- A dependency-free Python HTTP API built on the standard library
+- SQLite migrations, foreign keys, indexes, and FTS5 full-text search
+- Search by topic with category and publication-date filters
+- Paginated publication results and article detail views
+- Transparent related-reading recommendations based on category and token overlap
+- A responsive, keyboard-friendly static interface with safe DOM rendering
+- Security headers, parameterized SQL, API input bounds, and same-origin deployment
+- Unit, integration, repository, migration, and frontend safety tests
+- Docker, Compose, Make targets, and GitHub Actions CI
 
 ## Quick start
 
-### Frontend
-
-Open [`frontend/index.html`](frontend/index.html) in a browser. The page reads the local JSON data included with the demo.
-
-### Recommender
-
-The recommender uses Python 3.8+ and no external Python libraries.
+Python 3.11 or newer is recommended. The application has no third-party Python dependencies.
 
 ```bash
-cd ai_recommender
-python3 recommender.py "I want endgame practice"
+python -m chesslife_demo init-db
+python -m chesslife_demo serve
 ```
 
-It compares the query against the sample articles in `ai_recommender/articles.json` and returns matches based on keywords and term frequency.
+Open [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
-### SQL example
+The CLI defaults to `~/.chesslife-demo/chesslife.sqlite3`, which also works when the package is installed. The Make targets keep a development database in `instance/chesslife.sqlite3`. Override either convention with `--db` or `CHESSLIFE_DB_PATH`:
 
-Load the schema and then the seed data in a compatible SQL environment:
+```bash
+python -m chesslife_demo --db /tmp/chesslife.sqlite3 serve --port 8080
+```
+
+The application applies pending migrations automatically at startup. Migration `002_demo_seed.sql` inserts only the five fictional records already present in the original repository sample; their publication dates were not altered.
+
+## Explore from the command line
+
+The same FTS search used by the API is available as a small recommendation command:
+
+```bash
+python -m chesslife_demo recommend "endgame practice"
+```
+
+## Tests
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+Or use the included shortcuts:
+
+```bash
+make test
+make check
+```
+
+`make check` compiles the Python package and runs the complete test suite.
+
+## Docker
+
+```bash
+docker compose up --build
+```
+
+The site will be available at [http://127.0.0.1:8000](http://127.0.0.1:8000), with the SQLite database stored in a named volume.
+
+To run the image directly:
+
+```bash
+docker build -t chesslife-demo .
+docker run --rm -p 8000:8000 -v chesslife-data:/data chesslife-demo
+```
+
+## API at a glance
+
+| Method | Route | Purpose |
+| --- | --- | --- |
+| `GET` | `/api/health` | Liveness check |
+| `GET` | `/api/categories` | Categories and publication counts |
+| `GET` | `/api/publications` | FTS search, filters, and pagination |
+| `GET` | `/api/publications/{id}` | Complete publication detail |
+| `GET` | `/api/publications/{id}/recommendations` | Related reading |
+| `GET` | `/api/recommendations?q=...` | Query-based recommendations |
+
+See [docs/API.md](docs/API.md) for parameters and examples.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    Browser[Accessible browser UI] -->|JSON over same origin| API[Python HTTP API]
+    API --> Repository[Parameterized repository]
+    Repository --> SQLite[(SQLite + FTS5)]
+    Migrations[Versioned SQL migrations] --> SQLite
+```
+
+The code deliberately stays small and inspectable:
 
 ```text
-backend/schema.sql
-backend/seed_data.sql
+chesslife_demo/       application, migrations, and packaged static frontend
+tests/                database, repository, API, and frontend contract tests
+docs/                 API, architecture, and development notes
+frontend/             byte-for-byte original browser prototype (historical)
+backend/              byte-for-byte original standalone SQL (historical)
+ai_recommender/       byte-for-byte original TF prototype (historical)
+legacy/               runnable, explicitly labeled copies of useful baselines
 ```
 
-The repository has not published a cross-database compatibility test, so SQL dialect behavior should be verified for the selected engine.
+More detail is available in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
-## Scope and limitations
+## Data and recommendation limitations
 
-- Search runs against the small local demo dataset, not a production publication index.
-- The recommender is deterministic keyword/term-frequency matching; it is not a trained machine-learning ranking model.
-- The repository does not include production ChessLife code, credentials, analytics, or proprietary datasets.
-- No automated tests, accessibility audit, load test, or search-quality evaluation is included.
-- The demo is intended to illustrate the data flow and interface structure, not to reproduce the scale or operational behavior of a production archive.
+- The collection has five fictional articles, so search quality and recommendation quality cannot be generalized to a real archive.
+- Recommendations are deterministic and explainable: token overlap plus a same-category bonus. They are not machine-learning predictions.
+- Article bodies are intentionally short sample text, not copies of published ChessLife material.
+- FTS5 must be enabled in the Python SQLite build. Standard CPython distributions include it; startup fails clearly if a migration cannot create the index.
 
-## Data flow
+## Historical baseline
 
-```text
-sample publication metadata
-          ├──> browser search and filtering
-          ├──> SQL schema and example queries
-          └──> keyword/term-frequency recommendations
-```
+The repository's original files remain byte-for-byte at their existing paths under `frontend/`, `backend/`, and `ai_recommender/`, so old links and the development record remain intact. They are historical artifacts and are not imported or served by the supported application. In particular, their SQL-style comments inside `.json` files remain intentionally untouched.
 
-Keeping the demo self-contained makes it easy to inspect while separating the public example from the original production environment.
+[`legacy/`](legacy/) contains runnable, explicitly labeled copies of the useful term-frequency and SQL baselines. Only the invalid leading JSON comment was removed from that copy. See [docs/HISTORY.md](docs/HISTORY.md) for the exact boundary between the supported application and preserved artifacts.
 
+## Project status
+
+This demo is complete for local portfolio use: the data layer, API, frontend, tests, and container path are connected. Before publishing under an open-source license, the repository owner should choose and add the desired license explicitly.
